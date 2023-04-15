@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+  <table>
+    <thead>
+    <tr>
+      <th>Orario</th>
+      <th v-for="day in daysOfWeek" :key="day.day">{{ day.day }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="slot in timeSlots" :key="slot.slot">
+      <td>{{ slot.slot }}</td>
+      <td v-for="(activity, index) in activities" :key="index">
+        <div>
+          <span>{{ slot['day' + (index + 1)] }}</span>
+          <ul>
+            <li v-for="option in ['Option 1', 'Option 2', 'Option 3']" :key="option">
+              {{ option }}
+              <button @click="selectOption(slot, 'day' + (index + 1), option)">Select</button>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div v-if="selectedSlot">{{selectedSlot}}</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            selectedSlot: null,
+          activities: ['gym','swim','box'],
+            // timeSlots: [
+            //     {slot: 'Morning', choices: []},
+            //     {slot: 'Afternoon', choices: []}
+            // ],
+            // daysOfWeek: [
+            //     {day: 'Monday', slots: []},
+            //     {day: 'Tuesday', slots: []},
+            //     {day: 'Wednesday', slots: []},
+            //     {day: 'Thursday', slots: []},
+            //     {day: 'Friday', slots: []}
+            // ],
+          timeSlots: [
+            { slot: 'Morning', day1: '', day2: '', day3: '' },
+            { slot: 'Afternoon', day1: '', day2: '', day3: '' }
+          ],
+            returnUrl: '',
+        },
+        create() {
+            this.returnUrl = '/'
+        },
+        mounted() {
+            // $.get('ServletDoc', {}, data => {
+            //
+            // })
+            //   .catch(error => {
+            //       console.log(error)
+            //   });
+        },
+
+        methods: {
+          addChoice(day, slot, choice) {
+            day.slots[slot.slot].push(choice)
+          },
+          removeChoice(day, slot, choice) {
+            const index = day.slots[slot.slot].indexOf(choice)
+            if (index !== -1) {
+              day.slots[slot.slot].splice(index, 1)
+            }
+          },
+          selectOption(slot, day, option) {
+            slot[day] = option
+          }
+        }
+    })
+</script>
+</body>
+</html>
